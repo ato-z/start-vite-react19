@@ -1,0 +1,25 @@
+{
+  // CSS 验证配置 - 忽略所有常见的 Tailwind CSS 警告
+  "css.lint.unknownAtRules": "ignore",
+  "css.lint.vendorPrefix": "ignore",
+  "css.lint.propertyIgnoredDueToDisplay": "ignore",
+  "css.lint.unknownProperties": "ignore",
+  "css.customData": [".vscode/css-custom-data.json"],
+
+  // 如果你使用 SCSS/LESS，也可以添加这些配置
+  "scss.lint.unknownAtRules": "ignore",
+  "scss.lint.vendorPrefix": "ignore",
+  "less.lint.unknownAtRules": "ignore",
+  "less.lint.vendorPrefix": "ignore",
+
+  // Tailwind CSS IntelliSense 配置（如果安装了该扩展）
+  "tailwindCSS.experimental.classRegex": [
+    ["cva\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"],
+    ["cx\\(([^)]*)\\)", "(?:'|\"|`)([^']*)(?:'|\"|`)"]
+  ],
+
+  // 文件关联配置，确保 CSS 文件被正确识别
+  "files.associations": {
+    "*.css": "tailwindcss"
+  }
+}

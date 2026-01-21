@@ -1,0 +1,131 @@
+{
+  "version": 1.1,
+  "atDirectives": [
+    {
+      "name": "@theme",
+      "description": "Tailwind CSS 4 主题配置指令"
+    },
+    {
+      "name": "@layer",
+      "description": "Tailwind CSS 层级指令，用于组织样式（theme, base, components, utilities）"
+    },
+    {
+      "name": "@apply",
+      "description": "Tailwind CSS 应用工具类指令"
+    },
+    {
+      "name": "@config",
+      "description": "Tailwind CSS 配置指令"
+    },
+    {
+      "name": "@tailwind",
+      "description": "Tailwind CSS 注入指令"
+    },
+    {
+      "name": "@screen",
+      "description": "Tailwind CSS 响应式断点指令"
+    },
+    {
+      "name": "@variant",
+      "description": "Tailwind CSS 变体指令"
+    }
+  ],
+  "pseudoClasses": [
+    {
+      "name": ":-moz-focusring",
+      "description": "Firefox 特定的焦点环伪类"
+    },
+    {
+      "name": ":-moz-ui-invalid",
+      "description": "Firefox 特定的无效输入伪类"
+    }
+  ],
+  "pseudoElements": [
+    {
+      "name": "::-webkit-search-decoration",
+      "description": "WebKit 搜索输入装饰伪元素"
+    },
+    {
+      "name": "::-webkit-date-and-time-value",
+      "description": "WebKit 日期时间值伪元素"
+    },
+    {
+      "name": "::-webkit-datetime-edit",
+      "description": "WebKit 日期时间编辑伪元素"
+    },
+    {
+      "name": "::-webkit-datetime-edit-fields-wrapper",
+      "description": "WebKit 日期时间字段包装器伪元素"
+    },
+    {
+      "name": "::-webkit-datetime-edit-year-field",
+      "description": "WebKit 年份字段伪元素"
+    },
+    {
+      "name": "::-webkit-datetime-edit-month-field",
+      "description": "WebKit 月份字段伪元素"
+    },
+    {
+      "name": "::-webkit-datetime-edit-day-field",
+      "description": "WebKit 日期字段伪元素"
+    },
+    {
+      "name": "::-webkit-datetime-edit-hour-field",
+      "description": "WebKit 小时字段伪元素"
+    },
+    {
+      "name": "::-webkit-datetime-edit-minute-field",
+      "description": "WebKit 分钟字段伪元素"
+    },
+    {
+      "name": "::-webkit-datetime-edit-second-field",
+      "description": "WebKit 秒字段伪元素"
+    },
+    {
+      "name": "::-webkit-datetime-edit-millisecond-field",
+      "description": "WebKit 毫秒字段伪元素"
+    },
+    {
+      "name": "::-webkit-datetime-edit-meridiem-field",
+      "description": "WebKit 上午/下午字段伪元素"
+    },
+    {
+      "name": "::-webkit-calendar-picker-indicator",
+      "description": "WebKit 日历选择器指示器伪元素"
+    },
+    {
+      "name": "::-webkit-inner-spin-button",
+      "description": "WebKit 数字输入内部旋转按钮伪元素"
+    },
+    {
+      "name": "::-webkit-outer-spin-button",
+      "description": "WebKit 数字输入外部旋转按钮伪元素"
+    },
+    {
+      "name": "::file-selector-button",
+      "description": "文件选择按钮伪元素"
+    }
+  ],
+  "properties": [
+    {
+      "name": "-webkit-text-size-adjust",
+      "description": "WebKit 文本大小调整属性"
+    },
+    {
+      "name": "-webkit-tap-highlight-color",
+      "description": "WebKit 点击高亮颜色属性"
+    },
+    {
+      "name": "-webkit-text-decoration",
+      "description": "WebKit 文本装饰属性"
+    },
+    {
+      "name": "-webkit-appearance",
+      "description": "WebKit 外观属性"
+    },
+    {
+      "name": "contain-intrinsic-size",
+      "description": "CSS 包含固有尺寸属性"
+    }
+  ]
+}

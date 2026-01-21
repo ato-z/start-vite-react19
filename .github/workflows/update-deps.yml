@@ -1,0 +1,137 @@
+name: Update Dependencies
+
+on:
+  # 每周一上午 9 点运行
+  schedule:
+    - cron: '0 9 * * 1'
+  # 同时支持手动触发
+  workflow_dispatch:
+
+# 设置权限
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  update-dependencies:
+    runs-on: ubuntu-latest
+    steps:
+      # 1. 检出代码
+      - name: 检出代码
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+
+      # 2. 设置 Node.js
+      - name: 设置 Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      # 3. 启用 Yarn（项目使用 yarn）
+      - name: 启用 Yarn
+        run: |
+          corepack enable
+          corepack prepare yarn@stable --activate
+          yarn --version
+
+      # 4. 安装依赖（确保 lockfile 同步）
+      - name: 安装依赖
+        run: |
+          echo "📦 安装现有依赖..."
+          yarn install --no-immutable
+
+      # 5. 更新依赖（仅小版本和补丁版本）
+      - name: 检查可更新的依赖
+        id: check_updates
+        run: |
+          echo "🔍 检查依赖更新..."
+
+          # 保存当前 yarn.lock 的哈希值
+          OLD_HASH=$(md5sum yarn.lock | awk '{print $1}')
+          echo "当前 yarn.lock 哈希: $OLD_HASH"
+
+          # 使用 yarn 更新依赖（保留 package.json 的版本范围）
+          yarn up '*'
+
+          # 检查 yarn.lock 是否发生变化
+          NEW_HASH=$(md5sum yarn.lock | awk '{print $1}')
+          echo "更新后 yarn.lock 哈希: $NEW_HASH"
+
+          echo "📄 检查文件差异..."
+          git diff --stat
+
+          # 检查是否有更新
+          if [ "$OLD_HASH" = "$NEW_HASH" ] && git diff --exit-code package.json; then
+            echo "✅ 没有找到可更新的依赖"
+            echo "has_updates=false" >> $GITHUB_OUTPUT
+          else
+            echo "🎉 发现依赖更新"
+            echo "has_updates=true" >> $GITHUB_OUTPUT
+
+            # 显示具体更新了哪些包
+            echo "📋 更新详情:"
+            git diff package.json || true
+          fi
+
+      # 6. 生成分支名
+      - name: 生成分支名
+        if: steps.check_updates.outputs.has_updates == 'true'
+        id: generate_branch
+        run: |
+          BRANCH_NAME="deps/update-$(date +%Y%m%d-%H%M%S)"
+          echo "branch_name=$BRANCH_NAME" >> $GITHUB_OUTPUT
+          echo "🌿 生成的分支名: $BRANCH_NAME"
+
+      - name: 清理不必要的文件
+        if: steps.check_updates.outputs.has_updates == 'true'
+        run: |
+          # 移除 yarn 的安装状态缓存文件，不需要提交
+          rm -f .yarn/install-state.gz
+
+      # 7. 创建 Pull Request
+      # 使用 peter-evans/create-pull-request 自动创建分支和 PR
+      - name: 创建 Pull Request
+        if: steps.check_updates.outputs.has_updates == 'true'
+        id: cpr
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ steps.generate_branch.outputs.branch_name }}
+          base: main # 目标分支
+          title: 'chore: 更新依赖包'
+          body: |
+            ## 📦 依赖更新
+
+            自动检测并更新了 npm 依赖包的小版本更新。
+
+            ### 更改内容
+            - 更新了 `package.json` 和 `yarn.lock`
+            - 仅包含小版本（minor）和补丁（patch）更新
+
+            ### 检查清单
+            - [ ] 代码已通过本地测试
+            - [ ] 更新日志已更新（如需要）
+
+            @${{ github.actor }} 请 review 并合并此 PR
+          labels: |
+            dependencies
+            automated
+          draft: false
+          commit-message: 'chore: 更新依赖到最新小版本'
+          # 不删除分支，便于查看历史
+          delete-branch: false
+
+      # 8. [新增] 自动合并 PR
+      - name: 自动合并 PR
+        # 只有当上一步确实创建了 PR 时才运行
+        if: steps.cpr.outputs.pull-request-number != ''
+        run: |
+          # --merge: 使用合并提交 (也可以换成 --squash 或 --rebase)
+          # --auto:  如果配置了分支保护规则（如需要 CI 通过），它会等待检查通过后自动合并
+          # --delete-branch: 合并后删除临时分支
+          gh pr merge ${{ steps.cpr.outputs.pull-request-number }} --merge --auto --delete-branch
+        env:
+          # 使用 GitHub CLI 需要 GITHUB_TOKEN
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
