@@ -11,10 +11,10 @@
     "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx,json,css,scss,md}\""
   },
   "dependencies": {
-    "@tailwindcss/vite": "^4.2.2",
+    "@tailwindcss/vite": "^4.2.4",
     "react": "^19.2.5",
     "react-dom": "^19.2.5",
-    "tailwindcss": "^4.2.2"
+    "tailwindcss": "^4.2.4"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
@@ -28,7 +28,7 @@
     "globals": "^17.5.0",
     "prettier": "^3.8.3",
     "typescript": "^6.0.3",
-    "typescript-eslint": "^8.58.2",
-    "vite": "^8.0.9"
+    "typescript-eslint": "^8.59.0",
+    "vite": "^8.0.10"
   }
 }
